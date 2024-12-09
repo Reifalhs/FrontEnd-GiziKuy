@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 import joblib
+import numpy as np
 
 # Inisialisasi FastAPI
 app = FastAPI()
@@ -24,4 +25,7 @@ async def predict(request: PredictionRequest):
     # Prediksi menggunakan model
     prediction = model.predict([features])
     
-    return {"prediction": prediction[0]}  # Mengembalikan hasil prediksi
+    # Konversi hasil prediksi ke tipe data Python standar
+    prediction = prediction[0].item()
+    
+    return {"prediction": prediction}  # Mengembalikan hasil prediksi
