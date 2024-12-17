@@ -4,25 +4,34 @@ import axios from "axios";
 
 const Prediksi = () => {
   const [data, setData] = useState({
-    Umur: [],
-    "Jenis Kelamin": [],
-    "Tinggi Badan": [],
+    Umur: "",
+    "Jenis Kelamin": "",
+    "Tinggi Badan": "",
   });
 
-  useEffect(() => {
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setData((prevData) => ({
+      ...prevData,
+      [id]: value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
     axios
-      .get("http://127.0.0.1:8080/api/data")
+      .post("http://127.0.0.1:8080/api/data", data)
       .then((response) => {
-        setData(response.data);
+        console.log("Data submitted successfully:", response.data);
       })
       .catch((error) => {
-        console.error("There was an error fetching the data!", error);
+        console.error("There was an error submitting the data!", error);
       });
-  }, []);
+  };
 
   return (
     <div className="h-screen px-4 flex" id="prediksi">
-      <form className="mx-auto w-full my-auto bg-white">
+      <form className="mx-auto w-full my-auto bg-white" onSubmit={handleSubmit}>
         <a href="" className="flex items-center space-x-3 rtl:space-x-reverse">
           <span className="self-center text-2xl sm:text-4xl font-bold whitespace-nowrap text-[#FF4F5B]">
             GiziKuy
@@ -30,46 +39,50 @@ const Prediksi = () => {
         </a>
         <div className="mb-5">
           <label
-            htmlFor="umur"
+            htmlFor="Umur"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
             Umur(Bulan)
           </label>
           <input
             type="text"
-            id="umur"
-            value={data.Umur[0] || ""}
+            id="Umur"
+            value={data.Umur}
+            onChange={handleChange}
             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#FF4F5B] focus:border-[#FF4F5B] block w-full p-2.5 "
             required
           />
         </div>
         <div className="mb-5">
           <label
-            htmlFor="kelamin"
+            htmlFor="Jenis Kelamin"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
             Jenis kelamin
           </label>
           <select
-            id="kelamin"
-            value={data["Jenis Kelamin"][0] || ""}
+            id="Jenis Kelamin"
+            value={data["Jenis Kelamin"]}
+            onChange={handleChange}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#FF4F5B] focus:border-[#FF4F5B] block w-full p-2.5"
           >
-            <option value="Laki-laki">Laki-laki</option>
-            <option value="Perempuan">Perempuan</option>
+            <option value="">Pilih jenis kelamin</option>
+            <option value="0">Laki-laki</option>
+            <option value="1">Perempuan</option>
           </select>
         </div>
         <div className="mb-3">
           <label
-            htmlFor="tinggibadan"
+            htmlFor="Tinggi Badan"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
             Tinggi Badan(cm)
           </label>
           <input
             type="text"
-            id="tinggibadan"
-            value={data["Tinggi Badan"][0] || ""}
+            id="Tinggi Badan"
+            value={data["Tinggi Badan"]}
+            onChange={handleChange}
             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#FF4F5B] focus:border-[#FF4F5B] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
             required
           />
