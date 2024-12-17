@@ -1,13 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import React from "react";
 import axios from "axios";
 
 const Prediksi = () => {
   const [data, setData] = useState({
-    Umur: "",
-    "Jenis Kelamin": "",
-    "Tinggi Badan": "",
+    umur: "",
+    jenis_kelamin: "",
+    tinggi_badan: "",
   });
+
+  const [prediction, setPrediction] = useState("");
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -19,13 +21,22 @@ const Prediksi = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("Data yang dikirim ke Flask:", data); // Tambahkan log untuk debugging
     axios
-      .post("http://127.0.0.1:8080/api/data", data)
+      .post("/api/predict", data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((response) => {
-        console.log("Data submitted successfully:", response.data);
+        console.log("Respons dari Flask:", response.data); // Debug respons dari server
+        setPrediction(response.data.prediction);
       })
       .catch((error) => {
-        console.error("There was an error submitting the data!", error);
+        console.error(
+          "Error saat mengirim data ke Flask:",
+          error.response?.data || error.message
+        );
       });
   };
 
@@ -39,15 +50,15 @@ const Prediksi = () => {
         </a>
         <div className="mb-5">
           <label
-            htmlFor="Umur"
+            htmlFor="umur"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
             Umur(Bulan)
           </label>
           <input
             type="text"
-            id="Umur"
-            value={data.Umur}
+            id="umur"
+            value={data.umur}
             onChange={handleChange}
             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#FF4F5B] focus:border-[#FF4F5B] block w-full p-2.5 "
             required
@@ -55,14 +66,14 @@ const Prediksi = () => {
         </div>
         <div className="mb-5">
           <label
-            htmlFor="Jenis Kelamin"
+            htmlFor="jenis_kelamin"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
             Jenis kelamin
           </label>
           <select
-            id="Jenis Kelamin"
-            value={data["Jenis Kelamin"]}
+            id="jenis_kelamin"
+            value={data.jenis_kelamin}
             onChange={handleChange}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#FF4F5B] focus:border-[#FF4F5B] block w-full p-2.5"
           >
@@ -73,17 +84,17 @@ const Prediksi = () => {
         </div>
         <div className="mb-3">
           <label
-            htmlFor="Tinggi Badan"
+            htmlFor="tinggi_badan"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
             Tinggi Badan(cm)
           </label>
           <input
             type="text"
-            id="Tinggi Badan"
-            value={data["Tinggi Badan"]}
+            id="tinggi_badan"
+            value={data.tinggi_badan}
             onChange={handleChange}
-            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#FF4F5B] focus:border-[#FF4F5B] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#FF4F5B] focus:border-[#FF4F5B] block w-full p-2.5 "
             required
           />
         </div>
@@ -100,7 +111,7 @@ const Prediksi = () => {
           >
             Prediksi Status Gizi :{" "}
             <p className=" text-[#FF4F5B] hover:underline inline-block">
-              Stunting
+              {prediction}
             </p>
           </label>
         </div>
