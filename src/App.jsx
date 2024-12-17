@@ -1,7 +1,6 @@
-import Home from "./pages/Home"
-import Prediksi from "./pages/Prediksi"
-import Navbar from "./components/Navbar"
-
+import Home from "./pages/Home";
+import Prediksi from "./pages/Prediksi";
+import Navbar from "./components/Navbar";
 
 function App() {
   return (
@@ -10,7 +9,7 @@ function App() {
       <Home />
       <Prediksi />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
