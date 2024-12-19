@@ -41,7 +41,7 @@ const Prediksi = () => {
   };
 
   return (
-    <div className="h-screen px-4 flex" id="prediksi">
+    <div className="h-screen px-4 flex sm:w-3/5 m-auto" id="prediksi">
       <form className="mx-auto w-full my-auto bg-white" onSubmit={handleSubmit}>
         <a href="" className="flex items-center space-x-3 rtl:space-x-reverse">
           <span className="self-center text-2xl sm:text-4xl font-bold whitespace-nowrap text-[#FF4F5B]">
